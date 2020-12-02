@@ -2,7 +2,7 @@
   "name": "advent2020",
   "version": "1.0.0",
   "description": "Advent-ures in Elm",
-  "main": "index.js",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
