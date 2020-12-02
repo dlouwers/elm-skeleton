@@ -4,13 +4,19 @@
   "description": "Advent-ures in Elm",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack --mode production",
+    "watch": "webpack --mode development --watch",
+    "dev": "webpack serve --mode development --port 3000",
+    "errors": "webpack --mode development --display-error-details"
   },
   "author": "Dirk Louwers",
   "license": "Apache-2.0",
   "devDependencies": {
+    "file-loader": "1.1.10",
+    "loader-utils": "1.1.0",
     "elm-webpack-loader": "^7.0.1",
     "webpack": "^5.9.0",
-    "webpack-cli": "^4.2.0"
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "^3.11.0"
   }
 }
