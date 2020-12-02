@@ -1,0 +1,16 @@
+{
+  "name": "advent2020",
+  "version": "1.0.0",
+  "description": "Advent-ures in Elm",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dirk Louwers",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "elm-webpack-loader": "^7.0.1",
+    "webpack": "^5.9.0",
+    "webpack-cli": "^4.2.0"
+  }
+}
