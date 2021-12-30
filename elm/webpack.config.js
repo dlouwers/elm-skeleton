@@ -19,6 +19,8 @@ module.exports = {
         }]
     },
     devServer: {
-        contentBase: './dist',
+	static: {
+            directory: path.resolve(__dirname, './dist')
+	}
     }
 };
