@@ -4,5 +4,6 @@
 - elm
 
 # Todo
-- Have Elm work with Webpack
-- Create a page for day 1
+✓ Have Elm work with Webpack
+  Have Elm navigate between 2 pages and take parameters
+  Have Elm read rudimentary Flags
