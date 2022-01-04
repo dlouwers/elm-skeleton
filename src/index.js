@@ -4,5 +4,6 @@ require('./index.html');
 var Elm = require('./Main.elm').Elm;
 
 var app = Elm.Main.init({
-  node: document.getElementById('main')
+  node: document.getElementById('main'),
+  flags: navigator.userAgent
 });

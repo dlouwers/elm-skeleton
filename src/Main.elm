@@ -17,7 +17,7 @@ import Url.Parser as Up exposing ((</>), Parser, oneOf, parse, string)
 -- MAIN
 
 
-main : Program () Model Msg
+main : Program String Model Msg
 main =
     Browser.application
         { init = init
@@ -57,12 +57,13 @@ type alias Model =
     { route : Route
     , key : Nav.Key
     , name : Maybe String
+    , userAgent : String
     }
 
 
-init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init : String -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
-    ( { route = Maybe.withDefault NotFound (parse routeParser url), key = key, name = Nothing }, Cmd.none )
+    ( { route = Maybe.withDefault NotFound (parse routeParser url), key = key, name = Nothing, userAgent = flags }, Cmd.none )
 
 
 
@@ -116,7 +117,7 @@ view model =
             , body =
                 [ Html.toUnstyled <|
                     Tpl.mainFrame (Just "home") <|
-                        [ Homepage.page ]
+                        [ Homepage.page model.userAgent ]
                 ]
             }
 
