@@ -1,11 +1,15 @@
-module Main exposing (..)
+module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Nav
-import Html exposing (..)
-import Html.Attributes exposing (..)
+import Css
+import Css.Global
+import Html.Styled as Html
+import Html.Styled.Attributes as Attr
+import Tailwind.Breakpoints as Breakpoints
+import Tailwind.Utilities as Tw
 import Url
-import Url.Parser exposing ((</>), Parser, int, map, oneOf, parse, s, string)
+import Url.Parser as Up exposing ((</>), Parser, int, map, oneOf, parse, s, string)
 
 
 
@@ -37,9 +41,9 @@ type Route
 routeParser : Parser (Route -> a) a
 routeParser =
     oneOf
-        [ Url.Parser.map NotFound Url.Parser.top
-        , Url.Parser.map Hi (Url.Parser.s "greet" </> string)
-        , Url.Parser.map Bye (Url.Parser.s "wave" </> string)
+        [ Up.map NotFound Up.top
+        , Up.map Hi (Up.s "greet" </> string)
+        , Up.map Bye (Up.s "wave" </> string)
         ]
 
 
@@ -103,28 +107,31 @@ view model =
         Hi name ->
             { title = "Greeter"
             , body =
-                [ text <| "Hi " ++ name ++ ", welcome to elm"
-                , viewLink <| "/wave/" ++ name
-                ]
+                List.map Html.toUnstyled <|
+                    [ Html.text <| "Hi " ++ name ++ ", welcome to elm"
+                    , viewLink <| "/wave/" ++ name
+                    ]
             }
 
         Bye name ->
             { title = "Waver"
             , body =
-                [ text <| "Bye " ++ name ++ ", see you again"
-                , viewLink <| "/greet/" ++ name
-                ]
+                List.map Html.toUnstyled <|
+                    [ Html.text <| "Bye " ++ name ++ ", see you again"
+                    , viewLink <| "/greet/" ++ name
+                    ]
             }
 
         NotFound ->
-            { title = "Sorr"
+            { title = "Sorry"
             , body =
-                [ text "Sorry, I haven't found what you're looking for"
-                , viewLink <| "/greet/elm"
-                ]
+                List.map Html.toUnstyled <|
+                    [ Html.text "Sorry, I haven't found what you're looking for"
+                    , viewLink <| "/greet/elm"
+                    ]
             }
 
 
-viewLink : String -> Html msg
+viewLink : String -> Html.Html msg
 viewLink path =
-    div [] [ a [ href path ] [ text path ] ]
+    Html.div [] [ Html.a [ Attr.href path ] [ Html.text path ] ]
