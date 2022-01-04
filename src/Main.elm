@@ -3,13 +3,14 @@ module Main exposing (main)
 import Browser
 import Browser.Navigation as Nav
 import Css
-import Css.Global
+import Homepage
 import Html.Styled as Html
 import Html.Styled.Attributes as Attr
-import Tailwind.Breakpoints as Breakpoints
+import Html.Styled.Events as Evt
 import Tailwind.Utilities as Tw
+import Template as Tpl
 import Url
-import Url.Parser as Up exposing ((</>), Parser, int, map, oneOf, parse, s, string)
+import Url.Parser as Up exposing ((</>), Parser, oneOf, parse, string)
 
 
 
@@ -33,17 +34,18 @@ main =
 
 
 type Route
-    = Hi String
-    | Bye String
+    = Home
+    | SayHi
+    | Hi String
     | NotFound
 
 
 routeParser : Parser (Route -> a) a
 routeParser =
     oneOf
-        [ Up.map NotFound Up.top
+        [ Up.map Home Up.top
+        , Up.map SayHi (Up.s "greet")
         , Up.map Hi (Up.s "greet" </> string)
-        , Up.map Bye (Up.s "wave" </> string)
         ]
 
 
@@ -54,12 +56,13 @@ routeParser =
 type alias Model =
     { route : Route
     , key : Nav.Key
+    , name : Maybe String
     }
 
 
 init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
-    ( { route = Maybe.withDefault NotFound (parse routeParser url), key = key }, Cmd.none )
+    ( { route = Maybe.withDefault NotFound (parse routeParser url), key = key, name = Nothing }, Cmd.none )
 
 
 
@@ -69,6 +72,7 @@ init flags url key =
 type Msg
     = LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
+    | NameChanged String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -87,6 +91,9 @@ update msg model =
             , Cmd.none
             )
 
+        NameChanged name ->
+            ( { model | name = Just name }, Cmd.none )
+
 
 
 -- SUBSCRIPTIONS
@@ -104,34 +111,98 @@ subscriptions _ =
 view : Model -> Browser.Document Msg
 view model =
     case model.route of
+        Home ->
+            { title = "Home"
+            , body =
+                [ Html.toUnstyled <|
+                    Tpl.mainFrame (Just "home") <|
+                        [ Homepage.page ]
+                ]
+            }
+
+        SayHi ->
+            { title = "Greeter"
+            , body =
+                [ Html.toUnstyled <|
+                    Tpl.mainFrame (Just "greeter") <|
+                        [ nameInput NameChanged
+                        , greetButton model.name
+                        ]
+                ]
+            }
+
         Hi name ->
             { title = "Greeter"
             , body =
-                List.map Html.toUnstyled <|
-                    [ Html.text <| "Hi " ++ name ++ ", welcome to elm"
-                    , viewLink <| "/wave/" ++ name
-                    ]
-            }
-
-        Bye name ->
-            { title = "Waver"
-            , body =
-                List.map Html.toUnstyled <|
-                    [ Html.text <| "Bye " ++ name ++ ", see you again"
-                    , viewLink <| "/greet/" ++ name
-                    ]
+                [ Html.toUnstyled <|
+                    Tpl.mainFrame (Just "greeter") <|
+                        [ Html.text <| "Hi " ++ name ++ ", welcome to Elm"
+                        ]
+                ]
             }
 
         NotFound ->
             { title = "Sorry"
             , body =
-                List.map Html.toUnstyled <|
-                    [ Html.text "Sorry, I haven't found what you're looking for"
-                    , viewLink <| "/greet/elm"
-                    ]
+                [ Html.toUnstyled <|
+                    Tpl.mainFrame Nothing <|
+                        [ Html.text "Sorry, I haven't found what you're looking for"
+                        ]
+                ]
             }
 
 
-viewLink : String -> Html.Html msg
-viewLink path =
-    Html.div [] [ Html.a [ Attr.href path ] [ Html.text path ] ]
+nameInput : (String -> msg) -> Html.Html msg
+nameInput toMsg =
+    Html.div [ Attr.css [ Tw.mb_3, Tw.pt_0 ] ]
+        [ Html.input
+            [ Attr.type_ "text"
+            , Attr.placeholder "name"
+            , Attr.css
+                [ Tw.px_3
+                , Tw.py_3
+                , Tw.placeholder_gray_300
+                , Tw.text_gray_600
+                , Tw.relative
+                , Tw.bg_white
+                , Tw.rounded
+                , Tw.text_sm
+                , Tw.shadow
+                , Tw.outline_none
+                , Css.focus [ Tw.outline_none ]
+                , Tw.w_full
+                ]
+            , Evt.onInput toMsg
+            ]
+            []
+        ]
+
+
+greetButton : Maybe String -> Html.Html msg
+greetButton name =
+    Html.a [ Attr.href <| "/greet/" ++ Maybe.withDefault "Elmo" name ]
+        [ Html.button
+            [ Attr.css
+                [ Tw.bg_yellow_500
+                , Tw.text_white
+                , Css.active [ Tw.bg_yellow_600 ]
+                , Tw.font_bold
+                , Tw.uppercase
+                , Tw.text_sm
+                , Tw.px_6
+                , Tw.py_3
+                , Tw.rounded
+                , Tw.shadow
+                , Css.hover [ Tw.shadow_lg ]
+                , Tw.outline_none
+                , Css.focus [ Tw.outline_none ]
+                , Tw.mr_1
+                , Tw.mb_1
+                , Tw.ease_linear
+                , Tw.transition_all
+                , Tw.duration_150
+                ]
+            , Attr.type_ "button"
+            ]
+            [ Html.text "Greet" ]
+        ]
