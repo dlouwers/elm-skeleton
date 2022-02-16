@@ -1,7 +1,7 @@
 {
-  "name": "advent2020",
+  "name": "inser_your_name_here",
   "version": "1.0.0",
-  "description": "Advent-ures in Elm",
+  "description": "insert your description here",
   "private": true,
   "scripts": {
     "build": "webpack --mode production",
