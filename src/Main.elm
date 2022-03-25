@@ -63,7 +63,15 @@ type alias Model =
 
 init : String -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
-    ( { route = Maybe.withDefault NotFound (parse routeParser url), key = key, name = Nothing, userAgent = flags }, Cmd.none )
+    let 
+        route : Route
+        route = Maybe.withDefault NotFound (parse routeParser url)
+        name : Maybe String
+        name = case route of
+            Hi n -> Just n
+            _ -> Nothing
+    in
+    ( { route = route, key = key, name = name, userAgent = flags }, Cmd.none )
 
 
 
