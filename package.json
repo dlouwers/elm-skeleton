@@ -11,7 +11,7 @@
   "author": "Dirk Louwers",
   "license": "Apache-2.0",
   "devDependencies": {
-    "elm-tailwind-modules": "^0.3.2",
+    "elm-tailwind-modules": "^0.4.0",
     "elm-webpack-loader": "^8.0.0",
     "file-loader": "6.2.0",
     "loader-utils": "3.2.0",
