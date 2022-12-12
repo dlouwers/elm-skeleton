@@ -15,7 +15,7 @@
     "elm-tailwind-modules": "^0.4.0",
     "elm-webpack-loader": "^8.0.0",
     "file-loader": "6.2.0",
-    "loader-utils": "3.2.0",
+    "loader-utils": "3.2.1",
     "postcss": "^8.4.20",
     "tailwindcss": "^2.2.19",
     "webpack": "^5.74.0",
