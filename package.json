@@ -12,7 +12,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "elm": "^0.19.1-5",
-    "elm-tailwind-modules": "^0.4.1",
+    "elm-tailwind-modules": "^0.5.0",
     "elm-webpack-loader": "^8.0.0",
     "file-loader": "6.2.0",
     "loader-utils": "3.2.1",
